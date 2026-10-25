@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ChargeConnect AI – EV charging, within reach</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;800&display=swap">
+<style>
+:root{--bg:#e8ebee;--panel:#f3f5f6;--card:#fff;--ink:#1c1e20;--mut:#5d646a;--line:#c8cfd4;--sage:#8aa389;--sage-d:#587356;--lav:#dcd8ec;--sky:#d3e0ea;--char:#1f2224;color-scheme:light dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#121417;--panel:#1b1e22;--card:#24282d;--ink:#eef0f2;--mut:#a3abb2;--line:#373c42;--sage-d:#9db89b;--lav:#3a3850;--sky:#2c3a46}}
+:root[data-theme=dark]{--bg:#121417;--panel:#1b1e22;--card:#24282d;--ink:#eef0f2;--mut:#a3abb2;--line:#373c42;--sage-d:#9db89b;--lav:#3a3850;--sky:#2c3a46}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 Manrope,system-ui,sans-serif}
+button,input,select{font:inherit;color:inherit}
+a{color:inherit}
+.panel{max-width:1200px;margin:14px auto;padding:22px clamp(18px,4vw,48px) 56px;background:var(--panel);border-radius:6px;position:relative;overflow:hidden}
+.bar{display:flex;align-items:center;gap:16px;font-size:12px;color:var(--mut);margin-bottom:40px}
+.bar b{color:var(--ink);letter-spacing:.06em;font-size:14px}.bar i{flex:1;height:1px;background:var(--line)}
+.bar nav{display:flex;gap:18px}.bar nav a{text-decoration:none}.bar nav a:hover{color:var(--ink)}
+@media(max-width:720px){.bar nav,.bar span{display:none}}
+h1,h2,h3{margin:0;line-height:1.04;letter-spacing:-.02em;font-weight:600}
+h1{font-size:clamp(38px,6.4vw,76px)}h2{font-size:clamp(28px,4vw,46px);max-width:15em}h3{font-size:19px;letter-spacing:-.01em}
+p{margin:0}.mut{color:var(--mut)}
+.pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--ink);background:none;border-radius:99px;padding:8px 18px;font-size:14px;cursor:pointer;text-decoration:none}
+.pill.fill{background:var(--ink);color:var(--panel)}.pill:hover{background:var(--sage);border-color:var(--sage);color:#14201a}
+:focus-visible{outline:2px solid var(--sage-d);outline-offset:2px}
+.slab{position:absolute;right:0;bottom:0;width:110px;height:7px;background:var(--ink)}
+/* hero */
+.hero{display:grid;grid-template-columns:1.05fr 1fr;gap:20px;align-items:center}
+.hero .wm{position:absolute;left:-10px;bottom:-30px;font-size:clamp(110px,22vw,290px);font-weight:800;letter-spacing:-.04em;color:var(--line);opacity:.45;line-height:1;pointer-events:none;user-select:none}
+.hero>*{position:relative}.hero .bar{grid-column:1/-1;margin-bottom:10px}
+.hero p.lead{max-width:30em;margin:22px 0 28px;color:var(--mut)}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.art{aspect-ratio:1/.9;background:var(--sky);border-radius:4px;position:relative;overflow:hidden}
+.art .orb{position:absolute;border-radius:50%}
+.art svg{position:absolute;inset:0;width:100%;height:100%}
+.chip-float{position:absolute;background:var(--card);border:1px solid var(--line);padding:10px 14px;font-size:13px;border-radius:4px;box-shadow:0 8px 24px rgba(0,0,0,.08)}
+.bolt{animation:pulse 2.4s ease-in-out infinite}@keyframes pulse{50%{opacity:.35}}
+@media(max-width:860px){.hero{grid-template-columns:1fr}}
+/* finder */
+.ctrl{display:grid;grid-template-columns:2fr 1fr;gap:18px;margin:34px 0 22px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:18px}
+.box label,.lbl{font-size:13px;color:var(--mut);display:block;margin-bottom:8px}
+.models{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mbtn{border:1px solid var(--line);background:var(--panel);border-radius:3px;padding:8px 10px;text-align:left;cursor:pointer;transition:.15s}
+.mbtn svg{width:100%;height:34px;color:var(--mut)}.mbtn b{display:block;font-size:13px;line-height:1.2}.mbtn small{color:var(--mut);font-size:12px}
+.mbtn[aria-pressed=true]{background:var(--char);color:#eef0f2;border-color:var(--char)}.mbtn[aria-pressed=true] svg{color:var(--sage)}.mbtn[aria-pressed=true] small{color:#b4bcc2}
+input[type=text],select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:3px;background:var(--panel)}
+input[type=range]{width:100%;accent-color:var(--sage-d)}
+.batt{display:flex;align-items:baseline;justify-content:space-between}.batt strong{font-size:34px;font-weight:600}
+.meter{height:8px;background:var(--line);border-radius:2px;overflow:hidden;margin:6px 0 16px}.meter i{display:block;height:100%;background:var(--sage-d);transition:width .25s}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 16px}
+.filters button{border:1px solid var(--line);background:var(--card);padding:6px 14px;border-radius:99px;cursor:pointer;font-size:14px}
+.filters button[aria-pressed=true]{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+.ai{background:var(--lav);padding:14px 18px;border-radius:4px;margin-bottom:16px;display:flex;gap:12px;align-items:flex-start}
+.res{display:grid;grid-template-columns:1.1fr 1fr;gap:18px;align-items:start}
+.list{display:grid;gap:10px;max-height:640px;overflow:auto;padding-right:4px}
+.st{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:14px 16px;cursor:pointer;text-align:left;width:100%;display:block;transition:border-color .15s,transform .15s}
+.st:hover{border-color:var(--sage-d)}.st[aria-pressed=true]{border-color:var(--ink);box-shadow:inset 3px 0 0 var(--sage-d)}
+.st .top{display:flex;justify-content:space-between;gap:10px}.st .km{font-weight:600;white-space:nowrap}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.tag{font-size:12px;padding:2px 9px;border-radius:99px;background:var(--panel);border:1px solid var(--line)}
+.tag.ok{background:#dbe8da;color:#2d4a2d;border-color:#c1d6bf}.tag.warn{background:#efe6d3;color:#5b4713;border-color:#e0d3b5}.tag.bad{background:#ecd9d9;color:#6b2a2a;border-color:#dcc0c0}
+.tag.v{background:var(--char);color:#dfeadd;border-color:var(--char)}
+.map{background:var(--sky);border-radius:4px;aspect-ratio:1;width:100%;position:sticky;top:12px}
+@media(max-width:860px){.ctrl,.res{grid-template-columns:1fr}.map{position:static}}
+/* community */
+.dark{background:var(--char);color:#eef0f2}.dark .bar{color:#9aa3aa}.dark .bar b{color:#eef0f2}.dark .bar i{background:#3b4045}.dark .mut{color:#a9b1b8}.dark .slab{background:#eef0f2}
+.dark .pill{border-color:#eef0f2}.dark .pill.fill{background:#eef0f2;color:var(--char)}.dark .pill:hover{color:#14201a}
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:34px}
+.dcard{background:#2a2e32;border:1px solid #3b4045;border-radius:4px;padding:16px;margin-bottom:12px}
+.dcard .tag{background:#33383d;border-color:#444a50;color:#dfe4e8}.dcard .tag.v{background:var(--sage);color:#14201a;border-color:var(--sage);font-weight:600}
+.slots{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}
+.slot{border:1px solid #555c63;background:none;color:#eef0f2;padding:5px 12px;border-radius:3px;cursor:pointer;font-size:14px}
+.slot[aria-pressed=true]{background:var(--sage);color:#14201a;border-color:var(--sage)}.slot:disabled{opacity:.35;text-decoration:line-through;cursor:not-allowed}
+.form{background:#eef0f2;color:var(--ink);border-radius:4px;padding:20px}.form .lbl{color:#5d646a}
+.form input,.form select{background:#fff;color:#1c1e20;border-color:#c8cfd4}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.steps{list-style:none;padding:0;margin:16px 0;display:grid;gap:8px}
+.steps li{display:flex;gap:12px;align-items:center;padding:10px 12px;border:1px solid #c8cfd4;border-radius:3px;background:#fff;font-size:14px;color:#5d646a;transition:.3s}
+.steps li span{width:24px;height:24px;border-radius:50%;border:1px solid currentColor;display:grid;place-items:center;font-size:12px;flex:none}
+.steps li.act{border-color:#1c1e20;color:#1c1e20}.steps li.done{background:#dbe8da;border-color:#a9c4a7;color:#2d4a2d}.steps li.done span{background:#587356;border-color:#587356;color:#fff}
+.form .pill.fill{background:#1c1e20;color:#fff}.form .pill{border-color:#1c1e20}.form .pill:hover{color:#14201a;background:var(--sage)}
+@media(max-width:860px){.cgrid{grid-template-columns:1fr}}
+/* featured */
+.fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:30px}
+.fc{background:var(--card);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.fc .img{aspect-ratio:16/9;display:grid;place-items:center;border-bottom:1px solid var(--line)}.fc .img svg{width:78%;height:78%}
+.fc .bd{padding:14px 16px}.fc dl{display:flex;gap:18px;margin:10px 0 0}.fc dt{font-size:12px;color:var(--mut)}.fc dd{margin:0;font-weight:600}
+.sub{margin:44px 0 0;font-size:24px;font-weight:600;letter-spacing:-.01em}
+@media(max-width:860px){.fgrid{grid-template-columns:1fr}}
+@media(min-width:861px) and (max-width:1000px){.fgrid{grid-template-columns:1fr 1fr}}
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);margin-top:34px;border:1px solid var(--ink);border-radius:14px 3px 14px 3px}
+.stats div{padding:28px 26px;border-left:1px solid var(--line)}.stats div:first-child{border:0}
+.stats strong{display:block;font-size:clamp(40px,6vw,68px);font-weight:600;letter-spacing:-.03em;line-height:1}
+.stats p{margin-top:10px;color:var(--mut);font-size:14px;max-width:22em}
+.mini{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px}
+.mini div{background:var(--sky);padding:14px 16px;border-radius:3px}.mini div:nth-child(even){background:var(--lav)}.mini b{font-size:24px;display:block;font-weight:600}.mini span{font-size:13px;color:var(--mut)}
+@media(max-width:860px){.stats,.mini{grid-template-columns:1fr 1fr}.stats div{border-left:0;border-top:1px solid var(--line)}.stats div:first-child{border-top:0}}
+@media(max-width:520px){.stats,.mini{grid-template-columns:1fr}.models{grid-template-columns:1fr 1fr}}
+footer{max-width:1200px;margin:0 auto 30px;padding:14px 20px;color:var(--mut);font-size:13px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);background:var(--char);color:#fff;padding:12px 18px;border-radius:4px;opacity:0;transition:.3s;pointer-events:none;max-width:90vw;font-size:14px;z-index:20}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="car" viewBox="0 0 300 120"><path fill="currentColor" d="M8 88 L16 64 Q20 54 40 50 L92 42 Q112 18 152 16 L204 19 Q238 24 252 48 L282 56 Q294 60 294 74 L294 90 Q294 96 286 96 L8 96Z"/><path fill="#fff" fill-opacity=".85" d="M104 44 Q120 26 152 25 L196 27 Q222 31 234 48Z"/><path stroke="#1f2224" stroke-opacity=".35" d="M168 27 V48"/><circle cx="76" cy="96" r="21" fill="#1f2224"/><circle cx="76" cy="96" r="9" fill="#cfd5d9"/><circle cx="228" cy="96" r="21" fill="#1f2224"/><circle cx="228" cy="96" r="9" fill="#cfd5d9"/></symbol>
+<symbol id="stn" viewBox="0 0 120 140"><rect x="30" y="10" width="46" height="112" rx="3" fill="#1f2224"/><rect x="38" y="20" width="30" height="26" fill="#8aa389"/><path d="M47 24 L41 36 H50 L46 44 L58 30 H50 L54 24Z" fill="#1f2224"/><circle cx="53" cy="62" r="5" fill="#555c63"/><path d="M76 70 C100 70 96 100 100 108" stroke="#1f2224" stroke-width="5" fill="none"/><rect x="92" y="106" width="16" height="18" rx="3" fill="#1f2224"/><rect x="14" y="122" width="92" height="6" fill="#1f2224"/></symbol>
+</defs></svg>
+
+<main>
+<section class="panel hero" id="top">
+  <div class="bar"><b>CHARGECONNECT</b><i></i><nav><a href="#finder">Find a charger</a><a href="#community">Community</a><a href="#featured">Featured</a><a href="#impact">Impact</a></nav><span>EV drivers and home hosts across India</span></div>
+  <div>
+    <h1>Smart charging for every EV driver in India</h1>
+    <p class="lead">ChargeConnect AI matches your car, your battery and your route to the right charger in seconds, from public fast chargers to a verified neighbour’s driveway.</p>
+    <div class="row"><a class="pill fill" href="#finder">Find a charger now</a><a class="pill" href="#community">List your charger</a><a class="pill" href="#impact">See our impact</a></div>
+  </div>
+  <div class="art" aria-hidden="true">
+    <div class="orb" style="width:62%;aspect-ratio:1;background:var(--lav);right:-8%;top:-12%"></div>
+    <div class="orb" style="width:34%;aspect-ratio:1;background:var(--sage);left:6%;top:10%;opacity:.8"></div>
+    <svg viewBox="0 0 400 360" preserveAspectRatio="xMidYMid meet"><rect x="0" y="262" width="400" height="98" fill="#1f2224" fill-opacity=".9"/><path d="M0 262H400" stroke="#8aa389" stroke-width="3"/><g transform="translate(300 150)"><use href="#stn" width="84" height="98"/></g><g transform="translate(18 130) scale(1.1)" style="color:#f6f7f8"><use href="#car" width="300" height="120"/></g><path class="bolt" d="M232 118 l-20 34 h16 l-10 28 l30 -40 h-17z" fill="#8aa389"/></svg>
+    <div class="chip-float" style="left:6%;bottom:8%"><b>Nexon EV</b> · 35% → 80% in 38 min</div>
+    <div class="chip-float" style="right:6%;top:8%">3 of 4 bays free<br><span class="mut">0.8 km away</span></div>
+  </div>
+  <div class="wm" aria-hidden="true">CHARGE</div><div class="slab"></div>
+</section>
+
+<section class="panel" id="finder">
+  <div class="bar"><b>CHARGECONNECT</b><i></i><span>Station finder</span></div>
+  <h2>Tell us about your car. We’ll find the right plug.</h2>
+  <div class="ctrl">
+    <div class="box"><span class="lbl">Choose your EV model</span><div class="models" id="models"></div></div>
+    <div class="box">
+      <div class="batt"><span class="lbl" style="margin:0">Battery now</span><strong id="bv">35%</strong></div>
+      <div class="meter"><i id="bm"></i></div>
+      <input type="range" id="batt" min="5" max="95" value="35" aria-label="Battery percentage">
+      <label for="loc" style="margin-top:16px">Your location</label>
+      <input type="text" id="loc" list="areas" value="Indiranagar" autocomplete="off">
+      <datalist id="areas"></datalist>
+    </div>
+  </div>
+  <div class="ai" aria-live="polite"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg><p id="rec"></p></div>
+  <div class="filters" id="filters" role="group" aria-label="Filters"></div>
+  <div class="res"><div class="list" id="list"></div><svg class="map" id="map" viewBox="0 0 100 100" role="img" aria-label="Map of charging stations"></svg></div>
+  <div class="slab"></div>
+</section>
+
+<section class="panel dark" id="community">
+  <div class="bar"><b>CHARGECONNECT</b><i></i><span>Community Charge Network</span></div>
+  <h2>Your idle home charger could get someone home tonight.</h2>
+  <p class="mut" style="max-width:40em;margin-top:16px">Hosts earn from charger hours they don’t use. Drivers get more places to plug in. Every charger is checked in person or on video before it goes live.</p>
+  <div class="cgrid">
+    <div><h3 style="margin-bottom:14px">Available near you</h3><div id="hosts"></div></div>
+    <div class="form" id="listbox">
+      <h3>List your charger</h3>
+      <div class="f2" style="margin-top:14px">
+        <div><label class="lbl" for="hn">Your name</label><input type="text" id="hn" placeholder="Meera K."></div>
+        <div><label class="lbl" for="ha">Area</label><input type="text" id="ha" list="areas" placeholder="Jayanagar"></div>
+        <div><label class="lbl" for="ht">Charger type</label><select id="ht"><option>AC 7.4 kW · Type 2</option><option>AC 3.3 kW · Type 2</option><option>AC 11 kW · Type 2</option></select></div>
+        <div><label class="lbl" for="hp">Price per kWh (₹)</label><input type="text" id="hp" value="12"></div>
+      </div>
+      <span class="lbl">Hours you’re happy to share</span>
+      <div class="row" id="hs" style="margin-bottom:6px"></div>
+      <ol class="steps" id="steps"></ol>
+      <button class="pill fill" id="submit">Submit for verification</button>
+    </div>
+  </div>
+  <div class="slab"></div>
+</section>
+
+<section class="panel" id="featured">
+  <div class="bar"><b>CHARGECONNECT</b><i></i><span>Featured</span></div>
+  <h2>Popular EVs and the stations drivers rely on</h2>
+  <div class="fgrid" id="fcars"></div>
+  <p class="sub">Top-rated stations this week</p>
+  <div class="fgrid" id="fstn"></div>
+  <div class="slab"></div>
+</section>
+
+<section class="panel" id="impact">
+  <div class="bar"><b>CHARGECONNECT</b><i></i><span>Impact and access</span></div>
+  <h2>Results from the network so far</h2>
+  <div class="stats">
+    <div><strong><span data-count="42">0</span>%</strong><p>shorter average search time to a compatible, free charger</p></div>
+    <div><strong><span data-count="18600">0</span> t</strong><p>CO₂ avoided through shared and public charging sessions</p></div>
+    <div><strong><span data-count="3200">0</span></strong><p>verified home chargers opening up residential neighbourhoods</p></div>
+  </div>
+  <div class="mini"><div><b>96</b><span>cities with live station data</span></div><div><b>11</b><span>languages in the app</span></div><div><b>78%</b><span>of listings in areas with few public chargers</span></div><div><b>24×7</b><span>support for stranded drivers</span></div></div>
+  <div class="row" style="margin-top:30px"><a class="pill fill" href="#finder">Find a charger</a><a class="pill" href="#community">Become a host</a></div>
+  <div class="slab"></div>
+</section>
+</main>
+<footer><span>ChargeConnect AI · Bengaluru, India</span><span>Figures, stations and hosts shown are sample data for design purposes.</span></footer>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const $=s=>document.querySelector(s);
+const AREAS={Indiranagar:[62,40],Koramangala:[55,62],Whitefield:[92,38],'HSR Layout':[60,76],Hebbal:[48,10],Jayanagar:[38,68],'Electronic City':[66,94],'MG Road':[50,42]};
+const MODELS=[
+{n:'Tata Nexon EV',kwh:40.5,ac:7.2,dc:50,r:453,c:'#8aa389',conn:['CCS2','Type 2']},
+{n:'MG ZS EV',kwh:50.3,ac:7.4,dc:76,r:461,c:'#9aa7c4',conn:['CCS2','Type 2']},
+{n:'Mahindra XUV400',kwh:39.4,ac:7.2,dc:50,r:456,c:'#c8b4a3',conn:['CCS2','Type 2']},
+{n:'Tata Punch EV',kwh:35,ac:7.2,dc:50,r:421,c:'#b7c9b0',conn:['CCS2','Type 2']},
+{n:'BYD Atto 3',kwh:60.5,ac:7,dc:80,r:521,c:'#7f8fa0',conn:['CCS2','Type 2']},
+{n:'Hyundai Ioniq 5',kwh:72.6,ac:11,dc:150,r:631,c:'#b3a9d3',conn:['CCS2','Type 2']}];
+const ST=[
+{n:'VoltGrid Indiranagar',a:'Indiranagar',t:'DC',kw:60,cn:'CCS2',free:3,tot:4,p:[63,41],rt:4.7},
+{n:'GreenPlug Koramangala',a:'Koramangala',t:'DC',kw:30,cn:'CCS2',free:1,tot:2,p:[54,60],rt:4.4},
+{n:'Orchid Mall Fast Charge',a:'Whitefield',t:'DC',kw:120,cn:'CCS2',free:4,tot:6,p:[91,40],rt:4.8},
+{n:'HSR Plug Point',a:'HSR Layout',t:'AC',kw:22,cn:'Type 2',free:2,tot:2,p:[61,74],rt:4.3},
+{n:'Hebbal Flyover Hub',a:'Hebbal',t:'DC',kw:50,cn:'CCS2',free:0,tot:4,p:[47,12],rt:4.5},
+{n:'Metro Charge Jayanagar',a:'Jayanagar',t:'AC',kw:7.4,cn:'Type 2',free:3,tot:3,p:[39,67],rt:4.6},
+{n:'Tech Park Electronic City',a:'Electronic City',t:'DC',kw:60,cn:'CCS2',free:2,tot:4,p:[67,92],rt:4.5},
+{n:'Anjali’s driveway',a:'Jayanagar',t:'AC',kw:7.4,cn:'Type 2',free:1,tot:1,p:[37,70],rt:4.9,com:1},
+{n:'Rohit’s garage',a:'HSR Layout',t:'AC',kw:7.4,cn:'Type 2',free:1,tot:1,p:[59,78],rt:4.8,com:1}];
+const HOSTS=[
+{h:'Anjali R.',a:'Jayanagar',kw:7.4,pr:12,rt:4.9,n:62,sl:['06:00','09:00','13:00','18:00'],bk:['09:00'],v:1},
+{h:'Rohit M.',a:'HSR Layout',kw:7.4,pr:11,rt:4.8,n:41,sl:['07:00','11:00','15:00','20:00'],bk:['15:00','20:00'],v:1}];
+const S={m:0,b:35,loc:'Indiranagar',f:'all',sel:null};
+const tm=m=>m<60?Math.round(m)+' min':Math.floor(m/60)+' h '+Math.round(m%60)+' min';
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.k);toast.k=setTimeout(()=>e.classList.remove('on'),3800)}
+function data(){
+  const m=MODELS[S.m],u=AREAS[S.loc]||AREAS.Indiranagar,tg=S.b>=80?100:80;
+  return ST.map(s=>{
+    const d=Math.hypot(s.p[0]-u[0],s.p[1]-u[1])*.32,ok=m.conn.includes(s.cn);
+    const pw=Math.min(s.kw,s.t==='DC'?m.dc:m.ac),min=((tg-S.b)/100*m.kwh)/(pw*.9)*60;
+    return{...s,d,ok,min,tg,score:d+(ok?0:100)+(s.free?0:8)-s.rt};
+  }).sort((a,b)=>a.score-b.score);
+}
+function render(){
+  const m=MODELS[S.m];let L=data();const best=L[0];
+  $('#rec').innerHTML=`<b>Best match for your ${m.n}:</b> ${best.n}, ${best.d.toFixed(1)} km away. ${best.free} of ${best.tot} bays are free and you’d reach ${best.tg}% in about ${tm(best.min)}.`;
+  if(S.f==='fast')L=L.filter(s=>s.t==='DC');if(S.f==='free')L=L.filter(s=>s.free);if(S.f==='com')L=L.filter(s=>s.com);
+  if(!L.find(s=>s.n===S.sel))S.sel=L[0]&&L[0].n;
+  $('#list').innerHTML=L.length?L.map((s,i)=>`<button class="st" data-n="${s.n}" aria-pressed="${s.n===S.sel}"><div class="top"><div><h3>${s.n}</h3><span class="mut" style="font-size:14px">${s.a} · ${s.kw} kW ${s.t}</span></div><span class="km">${s.d.toFixed(1)} km</span></div><div class="tags">${i===0&&S.f==='all'?'<span class="tag v">AI best match</span>':''}${s.com?'<span class="tag v">Verified charger</span>':''}<span class="tag ${s.ok?'ok':'bad'}">${s.ok?'Compatible · '+s.cn:'Adapter needed'}</span><span class="tag ${s.free?'ok':'warn'}">${s.free?s.free+' of '+s.tot+' free':'All bays busy'}</span><span class="tag">~${tm(s.min)} to ${s.tg}%</span></div></button>`).join(''):'<p class="mut">No chargers match this filter. Try “All”.</p>';
+  const u=AREAS[S.loc]||AREAS.Indiranagar;
+  $('#map').innerHTML=`<g stroke="var(--panel)" stroke-width="2.4" fill="none"><path d="M0 30Q40 36 100 52"/><path d="M20 0Q40 40 38 100"/><path d="M70 0Q60 50 80 100"/><path d="M0 80Q50 70 100 82"/></g><circle cx="58" cy="52" r="34" stroke="var(--panel)" stroke-width="1.4" fill="none" stroke-dasharray="3 2"/>`+
+  `<rect x="${u[0]-2.6}" y="${u[1]-2.6}" width="5.2" height="5.2" transform="rotate(45 ${u[0]} ${u[1]})" fill="var(--ink)"/><text x="${u[0]+4}" y="${u[1]+1}" font-size="3" fill="var(--ink)">You</text>`+
+  L.map((s,i)=>{const on=s.n===S.sel;return`<g data-n="${s.n}" style="cursor:pointer"><circle cx="${s.p[0]}" cy="${s.p[1]}" r="${on?4.6:3.4}" fill="${s.free?'var(--sage-d)':'#9aa0a5'}" stroke="var(--card)" stroke-width="1"/><text x="${s.p[0]}" y="${s.p[1]+1.1}" font-size="3.2" text-anchor="middle" fill="#fff" font-weight="700">${i+1}</text></g>`}).join('');
+}
+function init(){
+  $('#models').innerHTML=MODELS.map((m,i)=>`<button class="mbtn" data-i="${i}" aria-pressed="${i==0}"><svg viewBox="0 0 300 120"><use href="#car"/></svg><b>${m.n}</b><small>${m.kwh} kWh · ${m.r} km</small></button>`).join('');
+  $('#areas').innerHTML=Object.keys(AREAS).map(a=>`<option value="${a}">`).join('');
+  $('#filters').innerHTML=[['all','All'],['fast','Fast DC'],['free','Available now'],['com','Community']].map(f=>`<button data-f="${f[0]}" aria-pressed="${f[0]==='all'}">${f[1]}</button>`).join('');
+  $('#bm').style.width='35%';
+  $('#hs').innerHTML=['06:00','09:00','13:00','18:00','21:00'].map(t=>`<button class="slot" data-h="${t}" aria-pressed="${t==='09:00'||t==='13:00'}">${t}</button>`).join('');
+  $('#steps').innerHTML=['Confirm your identity','Photo or video of the charger and meter','Match address to ownership or tenancy consent','Electrical safety check (earthing, MCB)'].map((t,i)=>`<li><span>${i+1}</span>${t}</li>`).join('');
+  hosts();render();
+}
+function hosts(){
+  $('#hosts').innerHTML=HOSTS.map((h,i)=>`<div class="dcard"><div class="row" style="justify-content:space-between;align-items:flex-start"><div><h3>${h.h} · ${h.a}</h3><span class="mut" style="font-size:14px">${h.kw} kW Type 2 · ₹${h.pr}/kWh · ★ ${h.rt} (${h.n} sessions)</span></div>${h.v?'<span class="tag v" style="font-size:13px;padding:4px 12px">✔ Verified charger</span>':''}</div><div class="slots" data-i="${i}">${h.sl.map(t=>`<button class="slot" data-t="${t}" ${h.bk.includes(t)?'disabled':''} aria-pressed="${h.pick===t}">${t}</button>`).join('')}</div><button class="pill fill" data-book="${i}">Book slot</button></div>`).join('');
+}
+document.addEventListener('click',e=>{
+  const t=e.target.closest('button,g[data-n]');if(!t)return;
+  if(t.dataset.i&&t.classList.contains('mbtn')){S.m=+t.dataset.i;document.querySelectorAll('.mbtn').forEach(b=>b.setAttribute('aria-pressed',b===t));render()}
+  else if(t.dataset.f){S.f=t.dataset.f;document.querySelectorAll('#filters button').forEach(b=>b.setAttribute('aria-pressed',b===t));render()}
+  else if(t.dataset.n){S.sel=t.dataset.n;render();const c=document.querySelector('.st[aria-pressed=true]');c&&c.scrollIntoView({block:'nearest',behavior:'smooth'})}
+  else if(t.dataset.h){t.setAttribute('aria-pressed',t.getAttribute('aria-pressed')!=='true')}
+  else if(t.dataset.t){const i=+t.parentNode.dataset.i;HOSTS[i].pick=t.dataset.t;hosts()}
+  else if(t.dataset.book){const h=HOSTS[+t.dataset.book];if(!h.pick)return toast('Choose a time slot first.');h.bk.push(h.pick);toast(`Booked ${h.pick} at ${h.h}’s charger in ${h.a}. The gate code arrives 15 minutes before.`);h.pick=null;hosts()}
+});
+$('#batt').addEventListener('input',e=>{S.b=+e.target.value;$('#bv').textContent=S.b+'%';$('#bm').style.width=S.b+'%';render()});
+$('#loc').addEventListener('input',e=>{const k=Object.keys(AREAS).find(a=>a.toLowerCase()===e.target.value.trim().toLowerCase());if(k){S.loc=k;render()}});
+let busy=0;
+$('#submit').addEventListener('click',()=>{
+  const n=$('#hn').value.trim(),a=$('#ha').value.trim();
+  if(busy)return;if(!n||!a)return toast('Add your name and area to start verification.');
+  const sl=[...document.querySelectorAll('#hs [aria-pressed=true]')].map(b=>b.dataset.h);
+  if(!sl.length)return toast('Choose at least one hour to share.');
+  busy=1;const li=[...document.querySelectorAll('#steps li')];li.forEach(x=>x.className='');
+  const btn=$('#submit');btn.textContent='Verifying…';
+  li.forEach((x,i)=>{setTimeout(()=>x.className='act',i*900);setTimeout(()=>x.className='done',i*900+800)});
+  setTimeout(()=>{
+    HOSTS.unshift({h:n,a,kw:+(($('#ht').value.match(/[\d.]+/)||[7.4])[0]),pr:+$('#hp').value||12,rt:5,n:0,sl,bk:[],v:1});
+    hosts();btn.textContent='Submit for verification';busy=0;
+    toast('Verified. Your charger is live with the verified-charger badge.');
+    $('#hosts').scrollIntoView({block:'nearest',behavior:'smooth'});
+  },li.length*900+300);
+});
+const io=new IntersectionObserver(es=>es.forEach(x=>{if(!x.isIntersecting)return;io.unobserve(x.target);const el=x.target,to=+el.dataset.count,r=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(r){el.textContent=to.toLocaleString('en-IN');return}let s=null;const f=ts=>{s=s||ts;const p=Math.min((ts-s)/1400,1);el.textContent=Math.round(to*(1-Math.pow(1-p,3))).toLocaleString('en-IN');p<1&&requestAnimationFrame(f)};requestAnimationFrame(f)}),{threshold:.4});
+document.querySelectorAll('[data-count]').forEach(e=>io.observe(e));
+/* featured */
+$('#fcars').innerHTML=[0,1,5].map(i=>{const m=MODELS[i];return`<article class="fc"><div class="img" style="background:${m.c}33;color:${m.c}"><svg viewBox="0 0 300 120"><use href="#car"/></svg></div><div class="bd"><h3>${m.n}</h3><dl><div><dt>Battery</dt><dd>${m.kwh} kWh</dd></div><div><dt>Range</dt><dd>${m.r} km</dd></div><div><dt>Fast charge</dt><dd>${m.dc} kW</dd></div></dl></div></article>`}).join('');
+$('#fstn').innerHTML=[2,0,5].map(i=>{const s=ST[i];return`<article class="fc"><div class="img" style="background:var(--sky)"><svg viewBox="0 0 120 140"><use href="#stn"/></svg></div><div class="bd"><h3>${s.n}</h3><span class="mut" style="font-size:14px">${s.a} · ★ ${s.rt}</span><dl><div><dt>Power</dt><dd>${s.kw} kW ${s.t}</dd></div><div><dt>Connector</dt><dd>${s.cn}</dd></div><div><dt>Bays free</dt><dd>${s.free}/${s.tot}</dd></div></dl></div></article>`}).join('');
+init();
+</script>
+</body>
+</html>
